@@ -14,7 +14,7 @@ data = pd.DataFrame(columns=['t', 'x', 'y'])
 m = 2               #Masse (kg)
 C = 0.45            #Spezieller Luftwiderstandskoeffizient ((0;2])
 A = 0.1963          #Querschnittsfläche (m²) Formel: 2*pi*r #A=0.1963 für r=2,5cm
-vel_x = 15          #X-Anfangsgeschwindigkeit (m/sec)
+vel_x = 5           #X-Anfangsgeschwindigkeit (m/sec)
 vel_y = 0           #Y-Anfangsgeschwindigkeit (m/sec)
 d_t = 0.01          #Zeitschritt (sec)
 t_max = 2.5         #Maximale Zeit (sec)
@@ -40,7 +40,7 @@ vel_x_start = vel_x
 vel_y_start = vel_y
 
 #Berechnen der Trajektorie
-while t<= t_max:
+while t < t_max:
 
     #Berechnen der Bewegung in X-Richtung
     F_Luft_x = k * vel_x**2     #Berechnung der Luftwiderstandskraft in X-Richtung
@@ -77,7 +77,7 @@ data.to_excel('Waagerechter_Wurf.ods', engine='odf', index=False)
 plt.title('Waagerechter Wurf mit Luftwiderstand')
 plt.xlabel('X-Richtung in Metern ->')
 plt.ylabel('Y-Richtung in Metern ->')
-plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', xy=(0, Y_Punkte[0]), xytext=(-1.95, Y_Punkte[0]-3), 
+plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', xy=(0, Y_Punkte[0]), xytext=(-1.45, Y_Punkte[0]-3), 
             bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='blue'),)
 plt.annotate('Wurfweite:'+ "{:10.2f}".format(X_Punkte[len(X_Punkte)-1]) + 'm' , xy=(X_Punkte[len(X_Punkte)-1], 0), xytext=(X_Punkte[len(X_Punkte)-1]-5, -0.15), 
             bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='red'),)
@@ -94,7 +94,7 @@ textstr_konst = '\n'.join((
     r'Luftdichte in kg/m²=%.2f' % (S, ),
     r'Spezieller Luftwiderstandskoeffizient=%.2f' % (t, ),))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(35, 22, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
+plt.text(26, 22, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
 #Veränerungsausgabe
 textstr_konst = '\n'.join((
@@ -107,7 +107,7 @@ textstr_konst = '\n'.join((
     r'Endgeschwindigkeit=%.2f' % (np.sqrt(vel_x**2+vel_y**2),),
     r'Falldauer in Sekunden=%.2f' % (t, ),))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(35, 19, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+plt.text(26, 19, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
 
 #Anzeigen des Trajektorie-Plots
 plt.plot(X_Punkte, Y_Punkte, 'r-')
