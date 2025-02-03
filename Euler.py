@@ -1,6 +1,7 @@
-#Aufgabe 3d
+#Aufgabe 3b
 #python.exe -m pip install odf odfpy pandas matplotlib
 
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,7 +15,7 @@ data = pd.DataFrame(columns=['t', 'x', 'y'])
 m = 2               #Masse (kg)
 C = 0.45            #Spezieller Luftwiderstandskoeffizient ((0;2])
 A = 0.1963          #Querschnittsfläche (m²) Formel: 2*pi*r #A=0.1963 für r=2,5cm
-vel_x = 15          #X-Anfangsgeschwindigkeit (m/sec)
+vel_x = 20          #X-Anfangsgeschwindigkeit (m/sec)
 vel_y = 0           #Y-Anfangsgeschwindigkeit (m/sec)
 d_t = 0.01          #Zeitschritt (sec)
 t_max = 2.5         #Maximale Zeit (sec)
@@ -38,12 +39,14 @@ Y_Punkte = []       #Liste für Y-Koordinaten für Matplotlib
 t_list = []         #Liste für die Zeit
 vel_x_start = vel_x
 vel_y_start = vel_y
+                    #Welche Geschwindigkeit?
+#Anfangsbedingungen in den Dataframe schreiben
 X_Punkte.append(x)
 Y_Punkte.append(y)
 t_list.append(t)
 
 #Berechnen der Trajektorie
-while t < t_max:
+while x < 25:
     t += d_t                    #Inkrementieren der Zeit
 
     #Berechnen der Bewegung in X-Richtung
@@ -77,42 +80,52 @@ for i in range(len(Y_Punkte)):
 data.to_excel('Waagerechter_Wurf.ods', engine='odf', index=False)
 
 #Einrichten von Matplotlib für das Zeichnen der Trajektorie
-plt.title('Waagerechter Wurf mit Luftwiderstand')
+plt.title('Simulierter waagerechter Wurf mit Luftwiderstand')
 plt.xlabel('X-Richtung in Metern ->')
 plt.ylabel('Y-Richtung in Metern ->')
-plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', xy=(0, Y_Punkte[0]), xytext=(-1.45, Y_Punkte[0]-3), 
-            bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='blue'),)
-plt.annotate('Wurfweite:'+ "{:10.2f}".format(X_Punkte[len(X_Punkte)-1]) + 'm' , xy=(X_Punkte[len(X_Punkte)-1], 0), xytext=(X_Punkte[len(X_Punkte)-1]-5, -0.15), 
-            bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='red'),)
 
+
+#Anzeigen des Trajektorie-Plots
+plt.plot(X_Punkte, Y_Punkte, 'r-')
+
+xmin, xmax, ymin, ymax = plt.axis()
+xmin, xmax, ymin, ymax = plt.axis([0, xmax, 0, ymax])
+
+plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', horizontalalignment='center', verticalalignment='center', xy=(0, Y_Punkte[0]), xytext=(xmax*0.2, ymax*0.7),
+            bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='blue'),fontsize=20,)
+plt.annotate('Wurfweite:'+ "{:10.2f}".format(X_Punkte[len(X_Punkte)-1]) + 'm' , horizontalalignment='center', verticalalignment='center', xy=(X_Punkte[len(X_Punkte)-1], 0), xytext=(0.7*xmax,0.2*ymax), 
+            bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='red'),fontsize=20,)
 #Legende
 red_line = mlines.Line2D([], [], color='red', marker='_', markersize=15, label='Trajektorie des Körpers')
 plt.legend('upper right',handles=[red_line])
 
-#Konstantenangabe
+#Parameterenangabe
 textstr_konst = '\n'.join((
-    'Konstanten:\n'
-    r'Masse in kg=%.2f' % (m, ),
-    r'Querschnittsfläche in m²=%.2f' % (A, ),
-    r'Luftdichte in kg/m²=%.2f' % (S, ),
-    r'Spezieller Luftwiderstandskoeffizient=%.2f' % (t, ),))
+    'Parameter:\n'
+    r'Masse: %.2f' % (m, )+" kg",
+    r'Querschnittsfläche: %.2f' % (A, )+" m²",
+    r'Luftdichte: %.2f' % (S, )+" kg/m³",
+    r'Spezieller Luftwiderstandskoeffizient: %.2f' % (C, ),))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(35, 22, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
+plt.text(0.75*xmax, 0.85*ymax, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
 #Veränerungsausgabe
 textstr_konst = '\n'.join((
-    'Veränderungen:\n'
-    r'Horizontale Startgeschwindigkeit=%.3f' % (vel_x_start, ),
-    r'Vertikale Startgeschwindigkeit=%.2f' % (vel_y_start, ),
-    r'Startgeschwindigkeit=%.2f' % (np.sqrt(vel_x_start**2+vel_y_start**2),),
-    r'Horizontale Endgeschwindigkeit=%.2f' % (vel_x, ),
-    r'Vertikale Endgeschwindigkeit=%.3f' % (vel_y, ),
-    r'Endgeschwindigkeit=%.2f' % (np.sqrt(vel_x**2+vel_y**2),),
-    r'Falldauer in Sekunden=%.2f' % (t, ),))
+    'Variablen:\n'
+    r'Horizontale Startgeschwindigkeit: %.3f' % (vel_x_start, )+" m/s",
+    r'Vertikale Startgeschwindigkeit: %.2f' % (vel_y_start, )+" m/s",
+    r'Effektive Startgeschwindigkeit: %.2f' % (np.sqrt(vel_x_start**2+vel_y_start**2),)+" m/s",
+    r'Horizontale Endgeschwindigkeit: %.2f' % (vel_x, )+ " m/s",
+    r'Vertikale Endgeschwindigkeit: %.3f' % (vel_y, )+" m/s",
+    r'Effektive Endgeschwindigkeit: %.2f' % (np.sqrt(vel_x**2+vel_y**2),)+" m/s",
+    r'Falldauer: %.2f' % (t, )+" s",))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(35, 19, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+plt.text(0.75*xmax, 0.75*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
 
-#Anzeigen des Trajektorie-Plots
-plt.plot(X_Punkte, Y_Punkte, 'r-')
+textstr_konst = '\n'.join((
+    'Iteratives Euler-Verfahren mit '+ "{:1.0f}".format(t/d_t)+ ' Iterationen von Julius Breitner (' + str(datetime.now().strftime("%d-%m-%Y"))+')',))
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+plt.text(0.7*xmax, -0.1*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+
 plt.grid(True)
 plt.show()
