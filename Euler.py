@@ -1,4 +1,4 @@
-#Aufgabe 3c
+#Aufgabe 3d
 #python.exe -m pip install odf odfpy pandas matplotlib
 
 import numpy as np
@@ -43,7 +43,7 @@ Y_Punkte.append(y)
 t_list.append(t)
 
 #Berechnen der Trajektorie
-while x<10 and y<3:
+while t < t_max:
     t += d_t                    #Inkrementieren der Zeit
 
     #Berechnen der Bewegung in X-Richtung
@@ -80,9 +80,9 @@ data.to_excel('Waagerechter_Wurf.ods', engine='odf', index=False)
 plt.title('Waagerechter Wurf mit Luftwiderstand')
 plt.xlabel('X-Richtung in Metern ->')
 plt.ylabel('Y-Richtung in Metern ->')
-plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', xy=(0, Y_Punkte[0]), xytext=(-0.4, Y_Punkte[0]-0.1), 
+plt.annotate('Abwurfhöhe:'+ "{:10.2f}".format(Y_Punkte[0]) + 'm', xy=(0, Y_Punkte[0]), xytext=(-1.45, Y_Punkte[0]-3), 
             bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='blue'),)
-plt.annotate('Wurfweite:'+ "{:10.2f}".format(X_Punkte[len(X_Punkte)-1]) + 'm' , xy=(X_Punkte[len(X_Punkte)-1], 0), xytext=(X_Punkte[len(X_Punkte)-1]-2, -0.01), 
+plt.annotate('Wurfweite:'+ "{:10.2f}".format(X_Punkte[len(X_Punkte)-1]) + 'm' , xy=(X_Punkte[len(X_Punkte)-1], 0), xytext=(X_Punkte[len(X_Punkte)-1]-5, -0.15), 
             bbox=dict(boxstyle="round", fc="0.8"), arrowprops=dict(arrowstyle="->", facecolor='red'),)
 
 #Legende
@@ -97,7 +97,7 @@ textstr_konst = '\n'.join((
     r'Luftdichte in kg/m²=%.2f' % (S, ),
     r'Spezieller Luftwiderstandskoeffizient=%.2f' % (t, ),))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(8, 1.7, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
+plt.text(35, 22, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
 #Veränerungsausgabe
 textstr_konst = '\n'.join((
@@ -110,7 +110,7 @@ textstr_konst = '\n'.join((
     r'Endgeschwindigkeit=%.2f' % (np.sqrt(vel_x**2+vel_y**2),),
     r'Falldauer in Sekunden=%.2f' % (t, ),))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-plt.text(8, 1.45, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+plt.text(35, 19, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
 
 #Anzeigen des Trajektorie-Plots
 plt.plot(X_Punkte, Y_Punkte, 'r-')
