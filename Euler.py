@@ -118,6 +118,7 @@ if Koordinaten == 1:
         r'Horizontale Endgeschwindigkeit: %.2f' % (vel_x, )+ " m/s",
         r'Vertikale Endgeschwindigkeit: %.3f' % (vel_y, )+" m/s",
         r'Effektive Endgeschwindigkeit: %.2f' % (np.sqrt(vel_x**2+vel_y**2),)+" m/s",
+        r'Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Res ),)+" m/s",
         r'Falldauer: %.2f' % (t, )+" s",))
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     plt.text(0.75*xmax, 0.75*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
@@ -162,6 +163,7 @@ else:
         r'Horizontale Endgeschwindigkeit: %.2f' % (vel_x, )+ " m/s",
         r'Vertikale Endgeschwindigkeit: %.3f' % (vel_y, )+" m/s",
         r'Effektive Endgeschwindigkeit: %.2f' % (np.sqrt(vel_x**2+vel_y**2),)+" m/s",
+        r'Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Res ),)+" m/s",
         r'Fallweite: %.2f' % (x, )+" m",
         r'Fallhöhe: %.2f' % (y, )+" m",
         r'Falldauer: %.2f' % (t, )+" s",))
