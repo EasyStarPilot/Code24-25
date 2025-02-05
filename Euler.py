@@ -11,8 +11,6 @@ import matplotlib.lines as mlines
 #Initialisieren eines leeren DataFrames zum Speichern der Daten
 data = pd.DataFrame(columns=['t', 'x', 'y','vel_y', 'Resultierende Geschwindigkeit'])
 
-#Koordinaten(#t/1) oder Geschwindigkeit(#f/0)
-Koordinaten = 0
 
 #Definition physikalischer Konstanten und Anfangsbedingungen
 m = 2               #Masse (kg)
@@ -51,7 +49,7 @@ while x < 25:
 
     #Berechnen der Bewegung in X-Richtung
     F_Luft_x = k * vel_x**2     #Berechnung der Luftwiderstandskraft in X-Richtung
-    a_x = (F - F_Luft_x) / m    #Berechnung der Beschleunigung in X-Richtung
+    a_x = - F_Luft_x / m        #Berechnung der Beschleunigung in X-Richtung
     vel_x = a_x * d_t + vel_x   #Berechnung der Änderung der Geschwindigkeit in X-Richtung
     x = x + vel_x * d_t         #Berechnung der Strecke in X-Richtung
     X_Punkte.append(x)
@@ -81,9 +79,13 @@ for i in range(len(Y_Punkte)):
 
 #Exportieren des DataFrames in eine .ods-Datei
 data.to_excel('Waagerechter_Wurf.ods', engine='odf', index=False)
+
+#Koordinaten(#t/1) oder Geschwindigkeit(#f/0)
+Koordinaten = 0
+
+plt.title('Simulierter waagerechter Wurf mit Luftwiderstand')
 if Koordinaten == 1:
     #Einrichten von Matplotlib für das Zeichnen der Trajektorie
-    plt.title('Simulierter waagerechter Wurf mit Luftwiderstand')
     plt.xlabel('X-Richtung in Metern ->')
     plt.ylabel('Y-Richtung in Metern ->')
 
@@ -109,27 +111,21 @@ if Koordinaten == 1:
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     plt.text(0.75*xmax, 0.85*ymax, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
-    #Veränerungenausgabe
+    #Veränerungsausgabe
     textstr_konst = '\n'.join((
         'Variablen:\n'
-        r'Horizontale Startgeschwindigkeit: %.3f' % (vel_x_start, )+" m/s",
+        r'Horizontale Startgeschwindigkeit: %.2f' % (vel_x_start, )+" m/s",
         r'Vertikale Startgeschwindigkeit: %.2f' % (vel_y_start, )+" m/s",
         r'Effektive Startgeschwindigkeit: %.2f' % (np.sqrt(vel_x_start**2+vel_y_start**2),)+" m/s",
         r'Horizontale Endgeschwindigkeit: %.2f' % (vel_x, )+ " m/s",
         r'Vertikale Endgeschwindigkeit: %.3f' % (vel_y, )+" m/s",
         r'Effektive Endgeschwindigkeit: %.2f' % (np.sqrt(vel_x**2+vel_y**2),)+" m/s",
+        r'Vertikale Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Y ),)+" m/s",
         r'Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Res ),)+" m/s",
         r'Falldauer: %.2f' % (t, )+" s",))
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.text(0.75*xmax, 0.75*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+    plt.text(0.75*xmax, 0.72*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
 
-    textstr_konst = '\n'.join((
-        'Iteratives Euler-Verfahren mit '+ "{:1.0f}".format(t/d_t)+ ' Iterationen von Julius Breitner (' + str(datetime.now().strftime("%d-%m-%Y"))+')',))
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.text(0.7*xmax, -0.1*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
-
-    plt.grid(True)
-    plt.show()
 else:
     #Einrichten von Matplotlib für das Zeichnen der Trajektorie
     plt.title('Simulierter waagerechter Wurf mit Luftwiderstand')
@@ -154,7 +150,7 @@ else:
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     plt.text(0.75*xmax, 0.805*ymax, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
-    #Veränerungenausgabe
+    #Veränerungsausgabe
     textstr_konst = '\n'.join((
         'Variablen:\n'
         r'Horizontale Startgeschwindigkeit: %.2f' % (vel_x_start, )+" m/s",
@@ -163,17 +159,31 @@ else:
         r'Horizontale Endgeschwindigkeit: %.2f' % (vel_x, )+ " m/s",
         r'Vertikale Endgeschwindigkeit: %.3f' % (vel_y, )+" m/s",
         r'Effektive Endgeschwindigkeit: %.2f' % (np.sqrt(vel_x**2+vel_y**2),)+" m/s",
+        r'Vertikale Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Y ),)+" m/s",
         r'Durchschnittsgeschwindigkeit: %.2f' % (np.average(Vel_Res ),)+" m/s",
         r'Fallweite: %.2f' % (x, )+" m",
         r'Fallhöhe: %.2f' % (y, )+" m",
         r'Falldauer: %.2f' % (t, )+" s",))
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.text(0.75*xmax, 0.68*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
-
+    plt.text(0.75*xmax, 0.66*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+    #Fehler
     textstr_konst = '\n'.join((
-        'Iteratives Euler-Verfahren mit '+ "{:1.0f}".format(t/d_t)+ ' Iterationen von Julius Breitner (' + str(datetime.now().strftime("%d-%m-%Y"))+')',))
+        'Variablen:\n'
+        r'Simulierte Weite: %.2f' % (X_Punkte[-1], )+" m",
+        r'Errechnete Weite: %.2f' % (vel_y_start, )+" m",
+        r'Effektive Fehlerquote in die horizontale Richtung: %.2f' % (np.sqrt(vel_x_start**2+vel_y_start**2),)+" m/s",
+        r'Relative Fehlerquote in die horizontale Richtung: %.2f' % (vel_x, )+ " %",
+        r'Simulierte Tiefe: %.2f' % (vel_x_start, )+" m",
+        r'Errechnete Tiefe: %.2f' % (vel_y_start, )+" m",
+        r'Effektive Fehlerquote in die vertikale Richtung: %.2f' % (np.sqrt(vel_x_start**2+vel_y_start**2),)+" m/s",
+        r'Relative Fehlerquote in die vertikale Richtung: %.2f' % (vel_x, )+ " %",))
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.text(0.7*xmax, -0.1*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+    plt.text(0.05*xmax, 0.66*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
 
-    plt.grid(True)
-    plt.show()
+textstr_konst = '\n'.join((
+    'Iteratives Euler-Verfahren mit '+ "{:1.0f}".format(t/d_t)+ ' Iterationen von Julius Breitner (' + str(datetime.now().strftime("%d-%m-%Y"))+')',))
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+plt.text(0.7*xmax, -0.1*ymax, textstr_konst, fontsize=14, verticalalignment='center', bbox=props)
+
+plt.grid(True)
+plt.show()
