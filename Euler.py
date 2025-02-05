@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 #Initialisieren eines leeren DataFrames zum Speichern der Daten
 data = pd.DataFrame(columns=['t', 'x mit Luftwiderstand', 'y mit Luftwiderstand','vel_y mit Luftwiderstand', 'Resultierende Geschwindigkeit mit Luftwiderstand', 'x ohne Luftwiderstand', 'y ohne Luftwiderstand'])
 
+#Koordinaten(#t/1) oder Geschwindigkeit(#f/0)
+Koordinaten = 0
+
 #Definition physikalischer Konstanten und Anfangsbedingungen
 m = 2               #Masse (kg)
 C = 0.45            #Spezieller Luftwiderstandskoeffizient ((0;2])
@@ -105,8 +108,6 @@ for i in range(len(Y_Punkte_FF)):
 #Exportieren des DataFrames in eine .ods-Datei
 data.to_excel('Waagerechter_Wurf.ods', engine='odf', index=False)
 
-#Koordinaten(#t/1) oder Geschwindigkeit(#f/0)
-Koordinaten = 1
 
 plt.title('Simulierter waagerechter Wurf mit Luftwiderstand')
 if Koordinaten == 1:
@@ -198,7 +199,7 @@ else:
 Weite_errechnet_FF = vel_x_start * t
 Tiefe_errechnet_FF = 0.5 * g * t ** 2 + vel_y_start * t
 textstr_konst = '\n'.join((
-    'Fehler:\n'_FF
+    'Fehler:\n'
     r'Simulierte Weite: %.2f' % (X_Punkte_FF[-1], )+" m",
     r'Errechnete Weite: %.2f' % (Weite_errechnet_FF, )+" m",
     r'Effektive Fehlerquote in die horizontale Richtung: %.2f' % (Weite_errechnet_FF-X_Punkte_FF[-1],),
