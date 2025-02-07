@@ -19,7 +19,7 @@ C = 0.45            #Spezieller Luftwiderstandskoeffizient ((0;2])
 A = 0.1963          #Querschnittsfläche (m²) Formel: 2*pi*r #A=0.1963 für r=2,5cm
 vel_x = 20          #X-Anfangsgeschwindigkeit (m/sec)
 vel_y = 0           #Y-Anfangsgeschwindigkeit (m/sec)
-d_t = 0.001           #Zeitschritt (sec)
+d_t = 0.001         #Zeitschritt (sec)
 t_max = 2.5         #Maximale Zeit (sec)
 
 #Definition der Schwerkraft und der Luftdichte
@@ -56,14 +56,14 @@ while x < 25:
 #Berechnen der Trajektorie mit Luftwiderstand
 
     #Berechnen der Bewegung in X-Richtung
-    F_Luft_x = k * vel_x * abs(vel_x)     # Sign correction for air resistance
+    F_Luft_x = k * vel_x * abs(vel_x)
     a_x = - F_Luft_x / m
     vel_x = a_x * d_t + vel_x
     x = x + vel_x * d_t
     X_Punkte.append(x)
     
     #Berechnen der Bewegung in Y-Richtung
-    F_Luft_y = k * vel_y * abs(vel_y)     # Sign correction for air resistance
+    F_Luft_y = k * vel_y * abs(vel_y)
     a_y = (F - F_Luft_y) / m
     vel_y = a_y * d_t + vel_y
     y = y + vel_y * d_t
@@ -80,35 +80,36 @@ hight = max(Y_Punkte)
 for i in range(len(Y_Punkte)):
     Y_Punkte[i] = (-Y_Punkte[i] + hight)
 
-# Initialize lists for free fall trajectory
+#Initialisierung der Listen für die Berechnung des freien Falls
 Y_Punkte_FF = [hight]
 X_Punkte_FF = [0]
-Vel_Y_FF = [0]  # Start with zero vertical velocity
-t_FF = [0]      # Add time list for free fall
+Vel_Y_FF = [0]  #Startgeschwindigkeit vertikal ist Null
+t_FF = [0]      #Zeitleiste für freien Fall
 x_FF = 0
 y_FF = hight
 
-# Calculate free fall trajectory points
-for t_current in t_list[1:]:  # Skip first point since it's already added
+#Berechne Trajektorienpunkte für den freien Fall
+for t_current in t_list[1:]:  #Überspringe ersten Punkt, da bereits hinzugefügt
     x_FF += vel_x_start * d_t
     vel_y_FF = g * d_t + Vel_Y_FF[-1]
     y_FF = Y_Punkte_FF[-1] - vel_y_FF * d_t
     
-    # Only add points until ground impact
+    #Füge Punkte nur bis zum Aufprall hinzu
     if y_FF > 0:
         X_Punkte_FF.append(x_FF)
         Y_Punkte_FF.append(y_FF)
         Vel_Y_FF.append(vel_y_FF)
         t_FF.append(t_current)
+
     else:
-        # Add final point at ground impact
+        #Füge letzten Punkt beim Aufprall hinzu
         X_Punkte_FF.append(x_FF)
         Y_Punkte_FF.append(0)
         Vel_Y_FF.append(vel_y_FF)
         t_FF.append(t_current)
         break
 
-# Add data to DataFrame
+#Füge Daten zum DataFrame hinzu
 for i in range(len(t_list)):
     data_row = {
         't': t_list[i],
@@ -177,7 +178,7 @@ else:
     #Anzeigen des Trajektorie-Plots
     plt.plot(t_list, Vel_Y,'r-', label='Vertikale Geschwindigkeit mit Luftwiderstand')
     plt.plot(t_list, Vel_Res,'g-', label='Effektive Geschwindigkeit mit Luftwiderstand')
-    # Only plot free fall velocity until impact
+    #Plotte Geschwindigkeit des freien Falls nur bis zum Aufprall
     plt.plot(t_FF, Vel_Y_FF, 'b:', label='Vertikale Geschwindigkeit ohne Luftwiderstand')
     plt.legend()
 
