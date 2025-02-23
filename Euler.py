@@ -1,4 +1,4 @@
-# Aufgabe 3b
+# Aufgabe 3d
 # python.exe -m pip install odf odfpy pandas matplotlib
 
 from datetime import datetime
@@ -19,15 +19,15 @@ data = pd.DataFrame(columns=['t', 'x mit Luftwiderstand', 'z mit Luftwiderstand'
                            'Resultierende Geschwindigkeit ohne Luftwiderstand'])
 
 # Auswahl der Darstellung: Koordinaten (1) oder Geschwindigkeit (0)
-Koordinaten = 0
+Koordinaten = 1
 
 # Definition physikalischer Konstanten und Anfangsbedingungen
 m = 2              # Masse (kg)
 C = 0.45           # Spezieller Luftwiderstandskoeffizient ((0;2])
 A = 0.1963         # Querschnittsfläche (m²) - Formel: 2*pi*r für r=2,5cm
-vel_x = 20         # Anfangsgeschwindigkeit in X-Richtung (m/s)
+vel_x = 15         # Anfangsgeschwindigkeit in X-Richtung (m/s)
 vel_z = 0          # Anfangsgeschwindigkeit in Z-Richtung (m/s)
-d_t = 0.01         # Zeitschritt (s)
+d_t = 0.00001       # Zeitschritt (s)
 t_max = 2.5        # Maximale Simulationszeit (s)
 
 # Definition der Schwerkraft und der Luftdichte
@@ -66,7 +66,7 @@ vel_z_start = vel_z
 
 
 # Berechnen der Trajektorie mit Luftwiderstand
-while x < 25:
+while t <= 2.5:
     t += d_t        # Inkrementieren der Zeit
 
     # Berechnen der Bewegung in X-Richtung
@@ -186,13 +186,13 @@ if Koordinaten == 1:
         'Parameter:\n'
         r'Masse: %.2f' % (m, )+" kg",
         r'Querschnittsfläche: %.2f' % (A, )+" m²",
-        r'Luftdichte: %.2f' % (S, )+" kg/m³",
+        r'Luftdichte: %.2f' % (ρ, )+" kg/m³",
         r'Spezieller Luftwiderstandskoeffizient: %.2f' % (C, ),
         r'Horizontale Startgeschwindigkeit: %.2f' % (vel_x_start, )+" m/s",
         r'Vertikale Startgeschwindigkeit: %.2f' % (vel_z_start, )+" m/s",
         r'Effektive Startgeschwindigkeit: %.2f' % (np.sqrt(vel_x_start**2+vel_z_start**2),)+" m/s",))
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.text(0.75*xmax, 0.84*ymax, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
+    plt.text(0.75*xmax, 0.82*ymax, textstr_konst, fontsize=14, verticalalignment='baseline', bbox=props)
 
     # Variablenausgabe
     textstr_konst = '\n'.join((
